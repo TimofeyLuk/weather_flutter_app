@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:weather_flutter_app/Models/TodayWeatherDataModel.dart';
+import 'package:weather_flutter_app/Services/HTTP-ReqestsService.dart';
 
 
 class MainInfoWidget extends StatefulWidget {
@@ -12,11 +14,12 @@ class MainInfoWidget extends StatefulWidget {
 class _MainInfoWidgetState extends State<MainInfoWidget> {
   String location;
   String weather;
+  Future<TodayWeatherDataModel> data;
 
   @override
   void initState() {
-    location = "Error, ER";
     weather = "-- C | Error";
+    data = fetchTodayWeather();
     super.initState();
   }
 
@@ -27,19 +30,69 @@ class _MainInfoWidgetState extends State<MainInfoWidget> {
         margin: const EdgeInsets.only(top: 10.0),
         child: Column(
           children: [
-            Image.asset(
-              "icons/?.png",
-              width: 100,
-              height: 100,
+
+            FutureBuilder<TodayWeatherDataModel>(
+              future: data,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Image.network(
+                    'https://openweathermap.org/img/wn/${snapshot.data.weather[0].icon}@2x.png',
+                    width: 100,
+                    height: 100,
+                  );
+                } else if (snapshot.hasError) {
+                  print("${snapshot.error}");
+                  return Image.asset(
+                    "icons/?.png",
+                    width: 100,
+                    height: 100,
+                  );
+                }
+                // By default, show a loading spinner.
+                return CircularProgressIndicator();
+              },
             ),
-            Text(
-              "$location",
-              style: TextStyle(color: Colors.black, fontSize: 12.0),
+
+            FutureBuilder<TodayWeatherDataModel>(
+              future: data,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(
+                    (snapshot.data.name) + ", " + (snapshot.data.sys.country),
+                    style: TextStyle(color: Colors.black, fontSize: 12.0),
+                  );
+                } else if (snapshot.hasError) {
+                  print("${snapshot.error}");
+                  return Text(
+                      "No location",
+                      style: TextStyle(color: Colors.black, fontSize: 12.0),
+                  );
+                }
+                // By default, show a loading spinner.
+                return CircularProgressIndicator();
+              },
             ),
-            Text(
-              "$weather",
-              style: TextStyle(color: Colors.blue, fontSize: 24.0),
+
+            FutureBuilder<TodayWeatherDataModel>(
+              future: data,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(
+                    (snapshot.data.main.temp).toString() + " ˚C | " + (snapshot.data.weather[0].description),
+                    style: TextStyle(color: Colors.blue, fontSize: 24.0),
+                  );
+                } else if (snapshot.hasError) {
+                  print("${snapshot.error}");
+                  return Text(
+                    "-- ˚C | No data",
+                    style: TextStyle(color: Colors.blue, fontSize: 24.0),
+                  );
+                }
+                // By default, show a loading spinner.
+                return CircularProgressIndicator();
+              },
             ),
+
             Container(
               margin: const EdgeInsets.only(
                 top: 20.0,
