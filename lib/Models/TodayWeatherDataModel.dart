@@ -18,7 +18,7 @@ class TodayWeatherDataModel {
   factory TodayWeatherDataModel.fromJson(Map<String, dynamic> json) {
     return TodayWeatherDataModel(
       coord: MyCoord.fromJson(json['coord']),
-      weather: List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x))),//Weather.fromJson(json['weather']),
+      weather: List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x))),
       base: json['base'] as String,
       main: Main.fromJson(json['main']),
       visibility: json['visibility'] as int,
@@ -70,10 +70,10 @@ class Weather {
 
 
 class Main {
-  final double temp;
-  final double feels_like;
-  final double temp_min;
-  final double temp_max;
+  final dynamic temp;
+  final dynamic feels_like;
+  final dynamic temp_min;
+  final dynamic temp_max;
   final int pressure;
   final int humidity;
 
@@ -82,9 +82,9 @@ class Main {
   factory Main.fromJson(Map<String, dynamic> json) {
     return Main(
       temp: json['temp'],
-      feels_like: json['feels_like'] as double,
-      temp_min: json['temp_min'] as double,
-      temp_max: json['temp_max'] as double,
+      feels_like: json['feels_like'],
+      temp_min: json['temp_min'],
+      temp_max: json['temp_max'],
       pressure: json['pressure'] as int,
       humidity: json['humidity'] as int,
     );

@@ -31,7 +31,7 @@ class _ComplementaryInfoState extends State<ComplementaryInfo> {
   String getCompasDirection (int value) {
     if (value == null) return "--";
     if ((value >= 0 && value < 16) || (value >= 345 && value <= 360)) return "N";
-    if (value >= 16 && value < 74) return "NE";
+    if (value >= 16 && value <= 74) return "NE";
     if (value >= 75 && value <= 105) return "E";
     if (value >= 106 && value <= 164) return "SE";
     if (value >= 165 && value <= 195) return "S";
