@@ -4,6 +4,11 @@ import 'package:weather_flutter_app/Models/TodayWeatherDataModel.dart';
 import 'package:weather_flutter_app/Services/HTTP-ReqestsService.dart';
 
 
+class Info {
+  static double temp;
+  static String description;
+}
+
 class MainInfoWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -77,6 +82,8 @@ class _MainInfoWidgetState extends State<MainInfoWidget> {
               future: data,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  Info.temp = snapshot.data.main.temp;
+                  Info.description = snapshot.data.weather[0].description;
                   return Text(
                     (snapshot.data.main.temp).toString() + " ˚C | " + (snapshot.data.weather[0].description),
                     style: TextStyle(color: Colors.blue, fontSize: 24.0),

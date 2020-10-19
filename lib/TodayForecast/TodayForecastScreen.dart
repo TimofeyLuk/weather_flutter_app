@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'MainInfoWidget.dart';
 import 'ComplementaryInfo.dart';
 
@@ -18,10 +19,16 @@ class TodayForecastScreen extends StatelessWidget {
               child: Text(
                 "Share",
               ),
-              onPressed: () {},
+              onPressed: () => share(context),
               )
             ),
         ],
       );
+  }
+
+  void share (BuildContext context) {
+    final RenderBox box = context.findRenderObject();
+    final String text = "Weather will be ${Info.description} ${Info.temp} ˚C";
+    Share.share(text, sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
   }
 }
